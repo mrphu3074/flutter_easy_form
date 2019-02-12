@@ -5,7 +5,7 @@ class Form extends StatefulWidget {
       {this.initialValues,
       this.validate,
       this.onSubmit,
-      this.validateOnChange,
+      this.validateOnChange = false,
       this.child,
       Key key})
       : super(key: key);
