@@ -38,9 +38,19 @@ class FormState extends State<Form> {
 
   @override
   void didUpdateWidget(Form oldWidget) {
-    _bloc.validateForm = widget.validate;
-    _bloc.validateOnChange = widget.validateOnChange;
-    _bloc.submitForm = widget.onSubmit;
+    if (!_deepEq(oldWidget.initialValues, widget.initialValues)) {
+      setState(() {
+        _bloc = new Bloc(
+            initialValues: widget.initialValues,
+            validateOnChange: widget.validateOnChange,
+            validateForm: widget.validate,
+            submitForm: widget.onSubmit);
+      });
+    } else {
+      _bloc.validateForm = widget.validate;
+      _bloc.validateOnChange = widget.validateOnChange;
+      _bloc.submitForm = widget.onSubmit;
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -48,6 +58,36 @@ class FormState extends State<Form> {
   void dispose() {
     _bloc.dispose();
     super.dispose();
+  }
+
+  Function _listEquals = DeepCollectionEquality.unordered().equals;
+
+  _deepEq(Map map1, Map map2) {
+    /// Comparison Strategies
+    // 1: compare Map keys count
+    if (map1.keys.length != map2.keys.length) return false;
+
+    // 2: compare key names
+    if (!_listEquals(map1.keys, map2.keys)) return false;
+
+    // 3: compare values in root level
+    for (String key in map1.keys) {
+      var value1 = map1[key];
+      var value2 = map2[key];
+      if (value1.runtimeType != value2.runtimeType) {
+        return false;
+      } else if (value1 is List) {
+        if (_listEquals(value1, value2))
+          continue;
+        else
+          return false;
+      } else if (value1 is Map) {
+        return _deepEq(value1, value2);
+      } else if (value1 != value2) {
+        return false;
+      }
+    }
+    return true;
   }
 
   void focus(String fieldName) {
