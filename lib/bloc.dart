@@ -230,7 +230,7 @@ class Bloc {
     });
     kErrors.removeWhere((key, value) => value == null);
     errors = kErrors;
-    return kErrors.keys.length > 0;
+    return kErrors.keys.length == 0;
   }
 
   FormActions get formActions {
