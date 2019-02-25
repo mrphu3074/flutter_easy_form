@@ -1,6 +1,6 @@
 part of easy_form;
 
-typedef Widget FormItemBuilder(BuildContext context, Field formItemData);
+typedef Widget FormItemBuilder(BuildContext context, FieldData fieldData, FormActions formActions);
 
 class Item extends StatelessWidget {
   Item(
@@ -35,7 +35,7 @@ class Item extends StatelessWidget {
           return Container(
             key: ValueKey("FIELD_${name}_EMPTY"),
           );
-        return builder(context, snapshot.data);
+        return builder(context, snapshot.data, bloc.formActions);
       },
     );
   }
