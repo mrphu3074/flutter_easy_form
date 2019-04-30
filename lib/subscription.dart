@@ -12,15 +12,13 @@ class Subscription extends StatelessWidget {
   final bool submitCount;
 
   Subscription(
-      {
-        this.builder,
+      {this.builder,
       this.values = false,
       this.errors = false,
       this.touched = false,
       this.valid = false,
       this.dirty = false,
-      this.submitCount = false
-      });
+      this.submitCount = false});
 
   @override
   Widget build(BuildContext context) {

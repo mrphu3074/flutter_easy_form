@@ -100,6 +100,7 @@ class Field {
   FormatValueCallback formatValue;
   bool formatOnBlur;
   ValueChanged onChanged;
+  ValueChanged setValue;
   FieldValidateCallback validate;
   TextEditingController textController;
   FocusNode focusNode;
@@ -131,6 +132,7 @@ class Field {
       this.formatValue,
       this.formatOnBlur,
       this.onChanged,
+      this.setValue,
       this.validate}) {
     this.focusNode ??= FocusNode();
     this.textController ??= TextEditingController();

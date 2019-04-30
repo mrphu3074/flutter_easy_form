@@ -1,6 +1,6 @@
 name: easy_form
 description: Build Flutter form with ease.
-version: 0.0.5
+version: 0.0.7
 author: Phu Nguyen<mrphu3074@gmail.com>
 homepage: https://github.com/mrphu3074/flutter_easy_form.git
 
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   collection: ^1.14.11
-  rxdart: ^0.20.0
+  rxdart: '>=0.21.0'
 
 dev_dependencies:
   flutter_test:

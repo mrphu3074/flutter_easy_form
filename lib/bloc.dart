@@ -3,11 +3,11 @@ part of easy_form;
 class Bloc {
 	Map<String, Field> _fields = Map();
 	Map<String, dynamic> _initialValues = Map();
-	BehaviorSubject<Map<String, dynamic>> _values = BehaviorSubject();
-	BehaviorSubject<Map<String, String>> _errors = BehaviorSubject();
-	BehaviorSubject<Map<String, bool>> _touched = BehaviorSubject();
-	BehaviorSubject<bool> _valid = BehaviorSubject(seedValue: false);
-	BehaviorSubject<int> _submitCount = BehaviorSubject(seedValue: 0);
+	BehaviorSubject<Map<String, dynamic>> _values;
+	BehaviorSubject<Map<String, String>> _errors;
+	BehaviorSubject<Map<String, bool>> _touched;
+	BehaviorSubject<bool> _valid;
+	BehaviorSubject<int> _submitCount = BehaviorSubject.seeded(0);
 	bool validateOnChange = false;
 	List<StreamSubscription> _subscriptions = [];
 	ValidateFormCallback validateForm;
@@ -19,10 +19,10 @@ class Bloc {
 		this.validateForm,
 		this.submitForm}) {
 		_initialValues = Map.from(flattenMap(initialValues));
-		_values = new BehaviorSubject(seedValue: _initialValues ?? Map());
-		_errors = new BehaviorSubject(seedValue: Map());
-		_touched = new BehaviorSubject(seedValue: Map());
-		_valid = new BehaviorSubject<bool>(seedValue: false);
+		_values = new BehaviorSubject.seeded(_initialValues ?? Map());
+		_errors = new BehaviorSubject.seeded(Map());
+		_touched = new BehaviorSubject.seeded(Map());
+		_valid = new BehaviorSubject<bool>.seeded(false);
 		_fields = Map();
 		_subscriptionCached = Map();
 		_subscriptions = [];
@@ -172,7 +172,9 @@ class Bloc {
 					formatOnBlur: formatOnBlur,
 					formatValue: formatValue,
 					onChanged: onChanged,
-					validate: validate);
+					setValue: onChanged,
+					validate: validate
+		);
 
 			_subscriptions.add(
 					_fields[name].value$.listen((_) {
@@ -194,7 +196,7 @@ class Bloc {
 		[values, errors, touched, valid, dirty, submitCount].map((v) => v == true ? 1 : 0).join("");
 		if (!_subscriptionCached.containsKey(key)) {
 			Observable<Map<String, dynamic>> valueSource = values ? values$ : Observable.just(Map());
-			Observable errorSource = errors == true ? values$ : Observable.just(Map());
+			Observable errorSource = errors == true ? errors$ : Observable.just(Map());
 			Observable touchedSource = touched == true ? touched$ : Observable.just(Map());
 			Observable validSource = valid == true ? valid$ : Observable.just(false);
 			Observable dirtSource = dirty == true ? dirty$ : Observable.just(false);
